@@ -264,6 +264,22 @@ void mb_link_check_new_data(uint8_t oneByte)
                         }
                     }
                 break;
+
+                case MB_FUNC_Read_Exception_Status:
+                    MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
+                    MB_LINK_Rx_Buffer_Index++;
+                    if(MB_LINK_Rx_Buffer_Index>=4)
+                    {
+                        if(mb_crc_check(MB_LINK_Rx_Buffer,4)==MB_CRC_OK)
+                        {
+                            // OK -> Remove CRC & Go!
+                            mb_rx_packet_handler(mb_rx_packet_split(MB_LINK_Rx_Buffer,MB_LINK_Rx_Buffer_Index-2));
+                        }
+                        else mb_link_error_handler(MB_LINK_ERROR_CRC);
+                        mb_link_reset_rx_buffer();
+                        return;
+                    }
+                break;
             
                 default:
                 // MB Func Not Match!

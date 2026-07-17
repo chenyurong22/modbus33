@@ -107,6 +107,15 @@ mb_packet_s mb_packet_type_slave_responce_fix(mb_function_e function,uint16_t w1
 	return Packet;
 }
 
+mb_packet_s mb_packet_response_read_exeption_status(uint8_t Status)
+{
+	mb_packet_s Packet={.payload=MB_PACKET_Buffer};
+	Packet.function= MB_FUNC_Read_Exception_Status;
+	Packet.length=1;
+	Packet.payload[0]=Status;
+	return Packet;
+}
+
 mb_packet_s mb_packet_response_read_coil(uint8_t len,uint8_t *Data)
 {
 	return mb_packet_type_slave_responce_var(MB_FUNC_Read_Coils,len,Data);

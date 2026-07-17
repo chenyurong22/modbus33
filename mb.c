@@ -12,7 +12,7 @@
 #include "mb-link.h"
 #include "mb-packet.h"
 
-mb_config_s MB_Config={.address=MB_DEFAULT_SLAVE_ADDRESS};
+mb_config_s MB_Config={.address=MB_DEFAULT_SLAVE_ADDRESS,.status=0};
 
 #if(MB_MODE==MB_MODE_SLAVE)
 
@@ -24,6 +24,15 @@ void mb_slave_address_set(uint8_t Address)
 uint8_t mb_slave_address_get(void)
 {
     return MB_Config.address;
+}
+
+void mb_slave_status_set(uint8_t status)
+{
+    MB_Config.status=status;
+}
+uint8_t mb_slave_status_get(void)
+{
+    return MB_Config.status;
 }
 
 #elif(MB_MODE==MB_MODE_MASTER)
@@ -170,6 +179,13 @@ void mb_rx_packet_handler(mb_packet_s Packet)
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_slave_process_write_multiple_register(&Packet);
+            if(err){mb_error_handler(&Packet,err);return;}
+        } else
+        #endif
+        #if MB_ENABLE_FUNC_Read_Exception_Status
+        if(Packet.function==MB_FUNC_Read_Exception_Status)
+        {
+            err=mb_slave_process_read_exeption_status(&Packet);
             if(err){mb_error_handler(&Packet,err);return;}
         } else
         #endif

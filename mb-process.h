@@ -15,6 +15,7 @@ mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet);
 mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet);
 mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet);
 mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet);
+mb_error_e mb_slave_process_read_exeption_status(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_single_coil(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_single_register(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_multiple_coils(mb_packet_s* Packet);

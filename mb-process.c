@@ -180,4 +180,13 @@ mb_error_e mb_slave_process_write_multiple_register(mb_packet_s* Packet)
     return MB_OK;
 }
 
+mb_error_e mb_slave_process_read_exeption_status(mb_packet_s* Packet)
+{
+    #ifdef MB_SLAVE_LISTEN_BROADCAST
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
+    #endif
+    mb_tx_packet_handler(mb_packet_response_read_exeption_status(MB_Config.status));
+    return MB_OK;
+}
+
 #endif

@@ -44,6 +44,7 @@ extern "C" {
 #define MB_ENABLE_FUNC_Write_Single_Register    1
 #define MB_ENABLE_FUNC_Write_Multiple_Coils     1
 #define MB_ENABLE_FUNC_Write_Multiple_Registers 1
+#define MB_ENABLE_FUNC_Read_Exception_Status    1
 
 #define MB_COIL_ON  0xff00
 #define MB_COIL_OFF 0x0000
@@ -116,6 +117,7 @@ typedef struct
 // MODBUS Config
 typedef struct{
 	uint8_t address;
+    uint8_t status;
 	// mb_transport_e transport;
 	void (*tx_handler)(uint8_t *,uint8_t);
 	#if(MB_MODE==MB_MODE_MASTER)
@@ -131,6 +133,9 @@ extern mb_config_s MB_Config;
 
 void             mb_slave_address_set(uint8_t Address);						// Set Slave Address
 uint8_t          mb_slave_address_get(void);								// Get Slave Address
+
+void             mb_slave_status_set(uint8_t status);						// Set Slave status
+uint8_t          mb_slave_status_get(void);								    // Get Slave status
 
 void             mb_error_handler(mb_packet_s* Packet,mb_error_e err);		// Make and Send ERROR Packet in Slave Mode
 
