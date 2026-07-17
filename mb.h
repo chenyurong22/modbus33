@@ -22,7 +22,7 @@ extern "C" {
 
 // Mode Select
 #ifndef MB_MODE
-	#define MB_MODE         MB_MODE_MASTER
+	#define MB_MODE         MB_MODE_SLAVE
 #endif
 
 // Default SLAVE mode Device Address
