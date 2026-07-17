@@ -73,24 +73,13 @@ int MPIndex=0;
 void master_process(mb_packet_s Packet)
 {
     int i;
-    printf("MP: %02x %02x ",Packet.device_address,Packet.func);
-    if(Packet.type==MB_PACKET_TYPE_Slave_Responce_Var)
+    printf("MP: %02x %02x ",Packet.unit_id,Packet.function);
+    printf("%02x ",Packet.length);
+    for(i=0;i<Packet.length;i++)
     {
-        printf("%02x ",Packet.len);
-        for(i=0;i<Packet.len;i++)
-        {
-            printf("%02x",Packet.Data[i]);
-        }
-        printf("\n");
+        printf("%02X ",Packet.payload[i]);
     }
-    else if(Packet.type==MB_PACKET_TYPE_Slave_Responce_Fix)
-    {
-        printf("%04x %04x\n",Packet.u16_1,Packet.u16_2);
-    }
-    else if(Packet.type==MB_PACKET_TYPE_ERROR)
-    {
-        printf("ERROR CODE %02x in %02x\n",Packet.err,Packet.func&0x7f);
-    }
+    printf("\n");
     MPIndex++;
 }
 
@@ -160,24 +149,20 @@ int main()
 
     uint8_t TData[]={0x00,0xff};
 
-    mb_packet_s Packets[]={
-        mb_packet_request_write_single_coil(1,0,MB_COIL_ON),
-        mb_packet_request_read_coil(1,0,16),
-        mb_packet_request_write_single_register(1,0,0xffff),
-        mb_packet_request_read_holding_registers(1,0,1),
-        mb_packet_request_read_discrete_inputs(1,0,16),
-        mb_packet_request_read_input_registers(1,0,1),
-        mb_packet_request_write_multiple_coils(1,0,16,2,TData),
-        mb_packet_request_read_coil(1,0,16),
-        mb_packet_request_write_multiple_registers(0,1,1,2,TData),
-        mb_packet_request_read_holding_registers(1,1,1)
-    };
-
     printf("Test generate and send packets to slave:\n\n");
 
-    for(i=0;i<sizeof(Packets)/sizeof(mb_packet_s);i++)
-    mb_tx_packet_handler(Packets[i]);
+    mb_tx_packet_handler(mb_packet_request_write_single_coil(1,0,MB_COIL_ON));
+    mb_tx_packet_handler(mb_packet_request_read_coil(1,0,16));
+    mb_tx_packet_handler(mb_packet_request_write_single_register(1,0,0xffff));
+    mb_tx_packet_handler(mb_packet_request_read_holding_registers(1,0,1));
+    mb_tx_packet_handler(mb_packet_request_read_discrete_inputs(1,0,16));
+    mb_tx_packet_handler(mb_packet_request_read_input_registers(1,0,1));
+    mb_tx_packet_handler(mb_packet_request_write_multiple_coils(1,0,16,2,TData));
+    mb_tx_packet_handler(mb_packet_request_read_coil(1,0,16));
+    mb_tx_packet_handler(mb_packet_request_write_multiple_registers(0,1,1,2,TData));
+    mb_tx_packet_handler(mb_packet_request_read_holding_registers(1,1,1));
 
+    
     printf("\nSTATUS %02d/%02d %s\n",AnsPIndex,TestNum,(TestNum==AnsPIndex)?"PASS":"FAIL");
 
     bar();

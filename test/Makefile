@@ -18,9 +18,9 @@ clean:
 	rm -rf *.o *.exe mb server client
 
 test:
-	$(CC) $(WARN) test.c $(SRC) $(INC) $(DEFINES) -DMB_MODE=MB_MODE_SLAVE -o $(TARGET)
+	$(CC) $(WARN) -DMB_MODE=MB_MODE_SLAVE  test.c $(SRC) $(INC) $(DEFINES) -o $(TARGET)
 	./$(TARGET)
-	$(CC) $(WARN) test.c $(SRC) $(INC) $(DEFINES) -DMB_MODE=MB_MODE_MASTER -o $(TARGET)
+	$(CC) $(WARN) -DMB_MODE=MB_MODE_MASTER test.c $(SRC) $(INC) $(DEFINES)  -o $(TARGET)
 	./$(TARGET)
 
 

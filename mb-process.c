@@ -21,8 +21,8 @@ mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet)
     uint16_t i,Start,Size;
     uint32_t End;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start=MB_U16_AT(Packet->payload);
+    End=(uint32_t)MB_U16_AT(Packet->payload+2)+Start;
 
     for(i=0;Start<End&&(i/8)<MB_PROCESS_MAX_DATA;Start++,i++)
     {
@@ -34,7 +34,7 @@ mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet)
     if(i%8)Size++;
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
     mb_tx_packet_handler(mb_packet_response_read_coil(Size,MB_PROCESS_Buffer));
     return MB_OK;
@@ -45,8 +45,8 @@ mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet)
     uint16_t i,Start,Size;
     uint32_t End;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start=MB_U16_AT(Packet->payload);
+    End=(uint32_t)MB_U16_AT(Packet->payload+2)+Start;
 
     for(i=0;Start<End&&(i/8)<MB_PROCESS_MAX_DATA;Start++,i++)
     {
@@ -58,7 +58,7 @@ mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet)
     if(i%8)Size++;
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
     mb_tx_packet_handler(mb_packet_response_read_discrete_inputs(Size,MB_PROCESS_Buffer));
     return MB_OK;
@@ -69,8 +69,8 @@ mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet)
     uint16_t i,Start,Temp;
     uint32_t End;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start=MB_U16_AT(Packet->payload);
+    End=(uint32_t)MB_U16_AT(Packet->payload+2)+Start;
 
     for(i=0;Start<End&&i<MB_PROCESS_MAX_DATA;Start++,i+=2)
     {
@@ -81,7 +81,7 @@ mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet)
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
     mb_tx_packet_handler(mb_packet_response_read_holding_registers(i,MB_PROCESS_Buffer));
     return MB_OK;
@@ -92,8 +92,8 @@ mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
     uint16_t i,Start,Temp;
     uint32_t End;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start=MB_U16_AT(Packet->payload);
+    End=(uint32_t)MB_U16_AT(Packet->payload+2)+Start;
 
     for(i=0;Start<End&&i<MB_PROCESS_MAX_DATA;Start++,i+=2)
     {
@@ -104,7 +104,7 @@ mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
     mb_tx_packet_handler(mb_packet_response_read_input_registers(i,MB_PROCESS_Buffer));
     return MB_OK;
@@ -112,62 +112,71 @@ mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_write_single_coil(mb_packet_s* Packet)
 {
-    mb_table_write_bit(TBALE_Coils,Packet->u16_1,Packet->u16_2>>8);
+    mb_table_write_bit(TBALE_Coils,MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)>>8);
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
-    mb_tx_packet_handler(mb_packet_response_write_single_coil(Packet->u16_1,Packet->u16_2));
+    mb_tx_packet_handler(mb_packet_response_write_single_coil(MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)));
     return MB_OK;
 }
 
 mb_error_e mb_slave_process_write_single_register(mb_packet_s* Packet)
 {
-    mb_table_write(TABLE_Holding_Registers,Packet->u16_1,Packet->u16_2);
+    mb_table_write(TABLE_Holding_Registers,MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2));
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
-    mb_tx_packet_handler(mb_packet_response_write_single_register(Packet->u16_1,Packet->u16_2));
+    mb_tx_packet_handler(mb_packet_response_write_single_register(MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)));
     return MB_OK;
 }
 
 mb_error_e mb_slave_process_write_multiple_coils(mb_packet_s* Packet)
 {
-    uint16_t i,Start;
+    uint16_t Start;
+    uint16_t Quantity;
     uint32_t End;
+    uint16_t i;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start    = MB_U16_AT(Packet->payload);
+    Quantity = MB_U16_AT(Packet->payload + 2);
 
-    for(i=0;Start<End;Start++,i++)
+    End = (uint32_t)Start + Quantity;
+
+    for(i = 0; Start < End; Start++, i++)
     {
-        mb_table_write_bit(TBALE_Coils,Start,((Packet->Data[i/8])>>(i%8))&0x01);
+        mb_table_write_bit(
+            TBALE_Coils,
+            Start,
+            (Packet->payload[(i / 8) + 5] >> (i % 8)) & 0x01
+        );
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
-    mb_tx_packet_handler(mb_packet_response_write_multiple_coils(Packet->u16_1,Packet->u16_2));
+    mb_tx_packet_handler(mb_packet_response_write_multiple_coils(MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)));
     return MB_OK;
 }
 
 mb_error_e mb_slave_process_write_multiple_register(mb_packet_s* Packet)
 {
-    uint16_t i,Start,Temp;
+    uint16_t i, Start, Quantity, Temp;
     uint32_t End;
 
-    Start=Packet->u16_1;
-    End=(uint32_t)Packet->u16_2+Start;
+    Start    = MB_U16_AT(Packet->payload);
+    Quantity = MB_U16_AT(Packet->payload + 2);
+    End      = (uint32_t)Start + Quantity;
 
-    for(i=0;Start<End;Start++,i+=2)
+    for (i = 0; Start < End; Start++, i += 2)
     {
-        Temp=(Packet->Data[i]<<8)|(Packet->Data[i+1]);
-        mb_table_write(TABLE_Holding_Registers,Start,Temp);
+        Temp = MB_U16_AT(Packet->payload + 5 + i);
+        mb_table_write(TABLE_Holding_Registers, Start, Temp);
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
-    if(Packet->device_address != MB_BROADCAST_ADDRESS)
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
-    mb_tx_packet_handler(mb_packet_response_write_multiple_registers(Packet->u16_1,Packet->u16_2));
+    mb_tx_packet_handler(mb_packet_response_write_multiple_registers(MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)));
     return MB_OK;
 }
 

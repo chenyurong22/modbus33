@@ -7,6 +7,8 @@ extern "C" {
 
 #include "mb.h"
 
+#define MB_PACKET_Buffer_Size 32
+
 #if (MB_MODE==MB_MODE_MASTER) || defined MB_DEBUG
 
 mb_packet_s mb_packet_request_read_coil(uint8_t DeviceAddress,uint16_t StartAd,uint16_t Quantity);
@@ -30,7 +32,7 @@ mb_packet_s mb_packet_response_write_single_register(uint16_t RAddress,uint16_t 
 mb_packet_s mb_packet_response_write_multiple_coils(uint16_t StartAd,uint16_t Quantity);
 mb_packet_s mb_packet_response_write_multiple_registers(uint16_t StartAd,uint16_t Quantity);
 
-mb_packet_s mb_packet_error(mb_functions_e Func,mb_error_e Exeption_Code);
+mb_packet_s mb_packet_error(mb_function_e Func,mb_error_e Exeption_Code);
 
 #endif
 

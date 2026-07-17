@@ -14,7 +14,7 @@ extern "C" {
 #include <stdint.h>
 
 // Comment that for release
-//#define MB_DEBUG
+// #define MB_DEBUG
 
 // Mode List
 #define MB_MODE_MASTER  0
@@ -22,7 +22,7 @@ extern "C" {
 
 // Mode Select
 #ifndef MB_MODE
-	#define MB_MODE         MB_MODE_SLAVE
+	#define MB_MODE         MB_MODE_MASTER
 #endif
 
 // Default SLAVE mode Device Address
@@ -51,17 +51,43 @@ extern "C" {
 #define MB_MIN_QUANTITY 0x0001
 #define MB_MAX_QUANTITY 0x07d0
 
+#define MB_U16_AT(ptr) ((uint16_t)(((uint16_t)((ptr)[0]) << 8) | ((ptr)[1])))
+
 // ModBus Fanctions
 typedef enum{
-	MB_FUNC_Read_Coils					= 0x01,
-	MB_FUNC_Read_Discrete_Inputs		= 0x02,
-	MB_FUNC_Read_Holding_Registers		= 0x03,
-	MB_FUNC_Read_Input_Registers		= 0x04,
-	MB_FUNC_Write_Single_Coil			= 0x05,
-	MB_FUNC_Write_Single_Register		= 0x06,
-	MB_FUNC_Write_Multiple_Coils		= 0x0f,
-	MB_FUNC_Write_Multiple_Registers	= 0x10
-}mb_functions_e;
+    MB_FUNC_Read_Coils                  = 0x01,
+    MB_FUNC_Read_Discrete_Inputs        = 0x02,
+    MB_FUNC_Read_Holding_Registers      = 0x03,
+    MB_FUNC_Read_Input_Registers        = 0x04,
+    MB_FUNC_Write_Single_Coil           = 0x05,
+    MB_FUNC_Write_Single_Register       = 0x06,
+    MB_FUNC_Read_Exception_Status       = 0x07,
+
+    MB_FUNC_Diagnostics                 = 0x08,
+    MB_FUNC_Get_Comm_Event_Counter      = 0x0B,
+    MB_FUNC_Get_Comm_Event_Log          = 0x0C,
+
+    MB_FUNC_Write_Multiple_Coils        = 0x0F,
+    MB_FUNC_Write_Multiple_Registers    = 0x10,
+
+    MB_FUNC_Report_Server_ID            = 0x11,
+
+    MB_FUNC_Read_File_Record            = 0x14,
+    MB_FUNC_Write_File_Record           = 0x15,
+    MB_FUNC_Mask_Write_Register         = 0x16,
+    MB_FUNC_Read_Write_Multiple_Registers = 0x17,
+    MB_FUNC_Read_FIFO_Queue             = 0x18,
+
+    MB_FUNC_Encapsulated_Interface      = 0x2B
+
+} mb_function_e;
+
+typedef enum
+{
+    MB_TRANSPORT_RTU,
+    MB_TRANSPORT_ASCII,
+    MB_TRANSPORT_TCP
+} mb_transport_e;
 
 // MODBUS Exception Codes
 typedef enum{
@@ -77,35 +103,20 @@ typedef enum{
 	MB_ERROR_FAILED_TO_RESPOND 			= 0x0B
 }mb_error_e;
 
-// MODBUS Packet Type
-typedef enum{
-	MB_PACKET_TYPE_UNKNOWN,
-	MB_PACKET_TYPE_ERROR,
-	MB_PACKET_TYPE_Slave_Responce_Var,
-	MB_PACKET_TYPE_Slave_Responce_Fix,
-	MB_PACKET_TYPE_Master_Request_Fix,
-	MB_PACKET_TYPE_Master_Request_Var
-}mb_packet_type_e;
-
 // MODBUS Packet Struct
-typedef struct{
-	uint8_t device_address;	// Slave Device Address
-
-	uint8_t func;			// MODBUS Func Code
-	mb_packet_type_e type;	// Packet Type = (Fix,Var,Error) ref to 'mb_packet_type_e'
-
-	uint16_t u16_1;			// Data1 if Packet Type = Fixed Size
-	uint16_t u16_2;			// Data2 if Packet Type = Fixed Size
-
-	uint8_t len;			// Data Len if Packet Type = Var Size
-	uint8_t *Data;			// Data     if Packet Type = Var Size
-
-	uint8_t err;			// Error Value if Packet Type = Error
+typedef struct
+{
+    uint8_t unit_id;
+    mb_function_e function;
+    uint16_t length;
+    uint8_t *payload;
 }mb_packet_s;
+
 
 // MODBUS Config
 typedef struct{
 	uint8_t address;
+	// mb_transport_e transport;
 	void (*tx_handler)(uint8_t *,uint8_t);
 	#if(MB_MODE==MB_MODE_MASTER)
 	void (*master_process_handler)(mb_packet_s);
