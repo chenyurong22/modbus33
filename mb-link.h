@@ -9,8 +9,8 @@ extern "C" {
 
 // #define MB_LINK_DEBUG
 
-#define MB_LINK_Rx_Buffer_Size     32
-#define MB_LINK_Tx_Buffer_Size     32
+#define MB_LINK_Rx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
+#define MB_LINK_Tx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
 
 #define MB_LINK_Rx_MDBL  (MB_LINK_Rx_Buffer_Size-9)
 

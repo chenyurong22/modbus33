@@ -203,12 +203,13 @@ void mb_link_check_new_data(uint8_t oneByte)
                 //master request var
                 case MB_FUNC_Write_Multiple_Coils:
                 case MB_FUNC_Write_Multiple_Registers:
-                    if(MB_LINK_Rx_Buffer_Index<6)
+                case MB_FUNC_Read_Write_Multiple_Registers:
+                    if(MB_LINK_Rx_Buffer_Index<((MB_LINK_Func==0x17)?10:6))
                     {
                         MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
                         MB_LINK_Rx_Buffer_Index++;
                     }
-                    else if(MB_LINK_Rx_Buffer_Index==6) // Size of Data Bytes
+                    else if(MB_LINK_Rx_Buffer_Index==((MB_LINK_Func==0x17)?10:6))
                     {
                         if(oneByte>MB_LINK_Rx_MDBL)
                         {
@@ -265,6 +266,7 @@ void mb_link_check_new_data(uint8_t oneByte)
                     }
                 break;
 
+                #if MB_ENABLE_FUNC_Read_Exception_Status
                 case MB_FUNC_Read_Exception_Status:
                     MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
                     MB_LINK_Rx_Buffer_Index++;
@@ -280,6 +282,7 @@ void mb_link_check_new_data(uint8_t oneByte)
                         return;
                     }
                 break;
+                #endif
             
                 default:
                 // MB Func Not Match!

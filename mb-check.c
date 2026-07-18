@@ -37,6 +37,9 @@ mb_error_e mb_check_func(uint8_t func)
         #if MB_ENABLE_FUNC_Write_Multiple_Registers
         case MB_FUNC_Write_Multiple_Registers:break;
         #endif
+        #if MB_ENABLE_FUNC_Read_Write_Multiple_Registers
+        case MB_FUNC_Read_Write_Multiple_Registers:break;
+        #endif
         #if MB_ENABLE_FUNC_Read_Exception_Status
         case MB_FUNC_Read_Exception_Status:break;
         #endif

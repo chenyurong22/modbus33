@@ -35,16 +35,21 @@ extern "C" {
 // Default Broadcast address
 #define MB_BROADCAST_ADDRESS 0
 
+// Default All layes buffer size
+#define MB_DEFAULT_BUFFER_SIZE 64
+
 // Enable or Disable Support Modbus Function for Slave Mode
-#define MB_ENABLE_FUNC_Read_Coils               1
-#define MB_ENABLE_FUNC_Read_Discrete_Inputs     1
-#define MB_ENABLE_FUNC_Read_Holding_Registers   1
-#define MB_ENABLE_FUNC_Read_Input_Registers     1
-#define MB_ENABLE_FUNC_Write_Single_Coil        1
-#define MB_ENABLE_FUNC_Write_Single_Register    1
-#define MB_ENABLE_FUNC_Write_Multiple_Coils     1
-#define MB_ENABLE_FUNC_Write_Multiple_Registers 1
-#define MB_ENABLE_FUNC_Read_Exception_Status    1
+#define MB_ENABLE_FUNC_Read_Coils                       1
+#define MB_ENABLE_FUNC_Read_Discrete_Inputs             1
+#define MB_ENABLE_FUNC_Read_Holding_Registers           1
+#define MB_ENABLE_FUNC_Read_Input_Registers             1
+#define MB_ENABLE_FUNC_Write_Single_Coil                1
+#define MB_ENABLE_FUNC_Write_Single_Register            1
+#define MB_ENABLE_FUNC_Write_Multiple_Coils             1
+#define MB_ENABLE_FUNC_Write_Multiple_Registers         1
+#define MB_ENABLE_FUNC_Read_Write_Multiple_Registers    1
+#define MB_ENABLE_FUNC_Read_Exception_Status            1
+
 
 #define MB_COIL_ON  0xff00
 #define MB_COIL_OFF 0x0000

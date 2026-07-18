@@ -9,7 +9,7 @@ extern "C" {
 
 #if(MB_MODE==MB_MODE_SLAVE)
 
-#define MB_PROCESS_Buffer_Size 32
+#define MB_PROCESS_Buffer_Size MB_DEFAULT_BUFFER_SIZE
 
 mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet);
 mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet);
@@ -20,6 +20,7 @@ mb_error_e mb_slave_process_write_single_coil(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_single_register(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_multiple_coils(mb_packet_s* Packet);
 mb_error_e mb_slave_process_write_multiple_register(mb_packet_s* Packet);
+mb_error_e mb_slave_process_read_write_multiple_registers(mb_packet_s* Packet);
 
 #endif
 

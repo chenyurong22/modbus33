@@ -180,6 +180,42 @@ mb_error_e mb_slave_process_write_multiple_register(mb_packet_s* Packet)
     return MB_OK;
 }
 
+mb_error_e mb_slave_process_read_write_multiple_registers(mb_packet_s* Packet)
+{
+    uint16_t i, Start, Quantity, Temp;
+    uint32_t End;
+
+    // Write
+    Start    = MB_U16_AT(Packet->payload + 4);
+    Quantity = MB_U16_AT(Packet->payload + 2 + 4);
+    End      = (uint32_t)Start + Quantity;
+
+    for (i = 0; Start < End; Start++, i += 2)
+    {
+        Temp = MB_U16_AT(Packet->payload + 5 + 4 + i);
+        mb_table_write(TABLE_Holding_Registers, Start, Temp);
+    }
+
+    // Read
+    Start=MB_U16_AT(Packet->payload);
+    Quantity=MB_U16_AT(Packet->payload+2);
+    End=(uint32_t) Start + Quantity;
+
+    for(i=0;Start<End&&i<MB_PROCESS_MAX_DATA;Start++,i+=2)
+    {
+        Temp=mb_table_read(TABLE_Holding_Registers,Start);
+
+        MB_PROCESS_Buffer[i]=(Temp>>8)&0xff;
+        MB_PROCESS_Buffer[i+1]=Temp&0xff;
+    }
+
+    #ifdef MB_SLAVE_LISTEN_BROADCAST
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
+    #endif
+    mb_tx_packet_handler(mb_packet_response_read_write_multiple_registers(i,MB_PROCESS_Buffer));
+    return MB_OK;
+}
+
 mb_error_e mb_slave_process_read_exeption_status(mb_packet_s* Packet)
 {
     #ifdef MB_SLAVE_LISTEN_BROADCAST

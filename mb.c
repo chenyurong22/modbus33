@@ -182,6 +182,29 @@ void mb_rx_packet_handler(mb_packet_s Packet)
             if(err){mb_error_handler(&Packet,err);return;}
         } else
         #endif
+        #if MB_ENABLE_FUNC_Read_Write_Multiple_Registers
+        if(Packet.function==MB_FUNC_Read_Write_Multiple_Registers)
+        {
+            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_quantity(MB_U16_AT(Packet.payload+6));
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_quantity_reg_n_byte(MB_U16_AT(Packet.payload+6),Packet.payload[8]);
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_table_holding_registers_address(MB_U16_AT(Packet.payload),MB_U16_AT(Packet.payload+2));
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_table_holding_registers_address(MB_U16_AT(Packet.payload+4),MB_U16_AT(Packet.payload+6));
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_slave_process_read_write_multiple_registers(&Packet);
+            if(err){mb_error_handler(&Packet,err);return;}
+
+        } else
+        #endif
         #if MB_ENABLE_FUNC_Read_Exception_Status
         if(Packet.function==MB_FUNC_Read_Exception_Status)
         {

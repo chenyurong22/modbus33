@@ -131,6 +131,11 @@ mb_packet_s mb_packet_response_read_holding_registers(uint8_t len,uint8_t *Data)
 	return mb_packet_type_slave_responce_var(MB_FUNC_Read_Holding_Registers,len,Data);
 }
 
+mb_packet_s mb_packet_response_read_write_multiple_registers(uint8_t len,uint8_t *Data)
+{
+	return mb_packet_type_slave_responce_var(MB_FUNC_Read_Write_Multiple_Registers,len,Data);
+}
+
 mb_packet_s mb_packet_response_read_input_registers(uint8_t len,uint8_t *Data)
 {
 	return mb_packet_type_slave_responce_var(MB_FUNC_Read_Input_Registers,len,Data);
