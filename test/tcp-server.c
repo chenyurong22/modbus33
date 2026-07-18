@@ -1,66 +1,152 @@
 #include <arpa/inet.h>
+#include <sys/socket.h>
+#include <errno.h>
 
 #include "tcp-server.h"
 
-int listenfd, clientfd;
-struct sockaddr_in addr;
-uint8_t rx[256];
+static int listenfd = -1;
+static int clientfd = -1;
+
+static struct sockaddr_in addr;
+static uint8_t rx[256];
 
 void tcp_server_start(void)
 {
+    int opt = 1;
+
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (listenfd < 0)
+    {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    if (setsockopt(listenfd,
+                   SOL_SOCKET,
+                   SO_REUSEADDR,
+                   &opt,
+                   sizeof(opt)) < 0)
+    {
+        perror("setsockopt");
+    }
+
+    memset(&addr, 0, sizeof(addr));
 
     addr.sin_family = AF_INET;
     addr.sin_port = htons(PORT);
-    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    bind(listenfd, (struct sockaddr *)&addr, sizeof(addr));
+    if (bind(listenfd,
+             (struct sockaddr *)&addr,
+             sizeof(addr)) < 0)
+    {
+        perror("bind");
+        close(listenfd);
+        exit(EXIT_FAILURE);
+    }
 
-    listen(listenfd, 1);
+    if (listen(listenfd, 1) < 0)
+    {
+        perror("listen");
+        close(listenfd);
+        exit(EXIT_FAILURE);
+    }
 
-    printf("Waiting for client...\n");
-
-    clientfd = accept(listenfd, NULL, NULL);
-
-    printf("Client connected.\n");
+    printf("TCP Server started on port %d\n", PORT);
 }
 
 void tcp_server_stop(void)
 {
-    close(clientfd);
-    close(listenfd);
+    if (clientfd >= 0)
+    {
+        close(clientfd);
+        clientfd = -1;
+    }
+
+    if (listenfd >= 0)
+    {
+        close(listenfd);
+        listenfd = -1;
+    }
 }
 
 void tcp_server_rx(void (*rx_data)(uint8_t))
 {
-    int n = recv(clientfd, rx, sizeof(rx), 0);
-    if (n <= 0)
-        return;
+    int n;
 
-    #ifdef TCP_DEBUG
-        printf("Received %d bytes\n", n);
-        for(int i=0;i<n;i++)
-        {
-            printf("0X%02X ",rx[i]);
-        }
-        printf("\r\n");
-    #endif
-
-    for(int i=0;i<n;i++)
+    /* اگر کلاینتی متصل نیست */
+    if (clientfd < 0)
     {
-        rx_data(rx[i]);
+        printf("Waiting for client...\n");
+
+        clientfd = accept(listenfd, NULL, NULL);
+
+        if (clientfd < 0)
+        {
+            return;
+        }
+
+        printf("Client connected.\n");
     }
+
+    n = recv(clientfd, rx, sizeof(rx), 0);
+
+    /* کلاینت قطع شد */
+    if (n == 0)
+    {
+        printf("Client disconnected.\n");
+
+        close(clientfd);
+        clientfd = -1;
+
+        return;
+    }
+
+    /* خطا */
+    if (n < 0)
+    {
+        perror("recv");
+
+        close(clientfd);
+        clientfd = -1;
+
+        return;
+    }
+
+#ifdef TCP_DEBUG
+    printf("RX (%d): ", n);
+
+    for (int i = 0; i < n; i++)
+        printf("%02X ", rx[i]);
+
+    printf("\n");
+#endif
+
+    for (int i = 0; i < n; i++)
+        rx_data(rx[i]);
 }
 
-void tcp_server_send(uint8_t *Data,uint8_t Len)
+void tcp_server_send(uint8_t *Data, uint8_t Len)
 {
-    send(clientfd, Data, Len, 0);
-    #ifdef TCP_DEBUG
-        printf("Send %d bytes\n", Len);
-        for(int i=0;i<Len;i++)
-        {
-            printf("0X%02X ",Data[i]);
-        }
-        printf("\r\n");
-    #endif
+    if (clientfd < 0)
+        return;
+
+    if (send(clientfd, Data, Len, 0) <= 0)
+    {
+        printf("Send failed.\n");
+
+        close(clientfd);
+        clientfd = -1;
+
+        return;
+    }
+
+#ifdef TCP_DEBUG
+    printf("TX (%d): ", Len);
+
+    for (int i = 0; i < Len; i++)
+        printf("%02X ", Data[i]);
+
+    printf("\n");
+#endif
 }
