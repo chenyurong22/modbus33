@@ -1,29 +1,6 @@
 # MODBUS
 Modbus RTU C library for embedded systems.
 
-![MBLib-data-flow](https://user-images.githubusercontent.com/64005694/154830661-b1cc3740-ec50-44c9-9330-b34d01b1224c.svg)
-
-### Requirements
-**Memory**
-<table>
-    <tr>
-        <td></td>
-        <td>Flash</td>
-        <td>RAM</td>
-    </tr>
-    <tr>
-        <td><strong>Master</td>
-        <td>~2K</td>
-        <td>64</td>
-    </tr>
-    <tr>
-        <td><strong>Slave</td>
-        <td>~4K</td>
-        <td>96 *</td>
-    </tr>
-</table>
-* Without database size, default +68 Byte.
-
 ### Guide 
 
 Follow below steps:
@@ -52,8 +29,17 @@ Follow below steps:
 - `mb-process` : Process received packets
 - `mb-table` : Database
 
-### Run Test.c
-After installing `GCC` and `Make` , run below command:
+### Running Test Server
+
+A test server is provided to run and test the Modbus RTU slave implementation.
+
+To build and start the test server:
+
+```bash
+cd test
+make server
+./server
 ```
-make test
-```
+The server listens on TCP port 1502 and allows a client application to send test frames to the Modbus RTU slave.
+
+The TCP connection is only used as a test interface; the Modbus protocol implementation remains RTU.
