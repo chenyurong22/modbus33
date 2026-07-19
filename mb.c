@@ -82,6 +82,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Read_Discrete_Inputs
         if(Packet.function==MB_FUNC_Read_Discrete_Inputs)
         {
@@ -96,6 +97,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Read_Holding_Registers
         if(Packet.function==MB_FUNC_Read_Holding_Registers)
         {
@@ -110,6 +112,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Read_Input_Registers
         if(Packet.function==MB_FUNC_Read_Input_Registers)
         {
@@ -124,6 +127,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Write_Single_Coil
         if(Packet.function==MB_FUNC_Write_Single_Coil)
         {
@@ -138,6 +142,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Write_Single_Register
         if(Packet.function==MB_FUNC_Write_Single_Register)
         {
@@ -149,6 +154,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Write_Multiple_Coils
         if(Packet.function==MB_FUNC_Write_Multiple_Coils)
         {
@@ -166,6 +172,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         }
         else
         #endif
+
         #if MB_ENABLE_FUNC_Write_Multiple_Registers
         if(Packet.function==MB_FUNC_Write_Multiple_Registers)
         {
@@ -182,6 +189,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
             if(err){mb_error_handler(&Packet,err);return;}
         } else
         #endif
+
         #if MB_ENABLE_FUNC_Read_Write_Multiple_Registers
         if(Packet.function==MB_FUNC_Read_Write_Multiple_Registers)
         {
@@ -205,6 +213,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
 
         } else
         #endif
+
         #if MB_ENABLE_FUNC_Read_Exception_Status
         if(Packet.function==MB_FUNC_Read_Exception_Status)
         {
@@ -212,6 +221,24 @@ void mb_rx_packet_handler(mb_packet_s Packet)
             if(err){mb_error_handler(&Packet,err);return;}
         } else
         #endif
+
+        #if MB_ENABLE_FUNC_Encapsulated_Interface
+        if(Packet.function==MB_FUNC_Encapsulated_Interface)
+        {
+            err=mb_check_encapsulated_interface_mei_type(Packet.payload[0]);
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_ei_device_id_code(Packet.payload[1]);
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_check_ei_device_o_code(Packet.payload[2]);
+            if(err){mb_error_handler(&Packet,err);return;}
+
+            err=mb_slave_process_read_device_identification(&Packet);
+            if(err){mb_error_handler(&Packet,err);return;}
+        } else
+        #endif
+
         return;
 
     #elif(MB_MODE==MB_MODE_MASTER)

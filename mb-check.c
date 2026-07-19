@@ -16,33 +16,47 @@ mb_error_e mb_check_func(uint8_t func)
         #if MB_ENABLE_FUNC_Read_Coils
         case MB_FUNC_Read_Coils:break;
         #endif
+
         #if MB_ENABLE_FUNC_Read_Discrete_Inputs
         case MB_FUNC_Read_Discrete_Inputs:break;
         #endif
+
         #if MB_ENABLE_FUNC_Read_Holding_Registers
         case MB_FUNC_Read_Holding_Registers:break;
         #endif
+
         #if MB_ENABLE_FUNC_Read_Input_Registers
         case MB_FUNC_Read_Input_Registers:break;
         #endif
+
         #if MB_ENABLE_FUNC_Write_Single_Coil
         case MB_FUNC_Write_Single_Coil:break;
         #endif
+
         #if MB_ENABLE_FUNC_Write_Single_Register
         case MB_FUNC_Write_Single_Register:break;
         #endif
+
         #if MB_ENABLE_FUNC_Write_Multiple_Coils
         case MB_FUNC_Write_Multiple_Coils:break;
         #endif
+
         #if MB_ENABLE_FUNC_Write_Multiple_Registers
         case MB_FUNC_Write_Multiple_Registers:break;
         #endif
+
         #if MB_ENABLE_FUNC_Read_Write_Multiple_Registers
         case MB_FUNC_Read_Write_Multiple_Registers:break;
         #endif
+
         #if MB_ENABLE_FUNC_Read_Exception_Status
         case MB_FUNC_Read_Exception_Status:break;
         #endif
+
+        #if MB_ENABLE_FUNC_Encapsulated_Interface
+        case MB_FUNC_Encapsulated_Interface:break;
+        #endif
+        
         default:return MB_ERROR_ILLEGAL_FUNCTION;
     }
     return MB_OK;
@@ -83,7 +97,6 @@ mb_error_e mb_check_table_discretes_input_address(uint16_t StartAd,uint16_t Quan
     return MB_OK;
 }
 
-
 mb_error_e mb_check_table_input_registers_address(uint16_t StartAd,uint16_t Quantity)
 {
     if(StartAd>=(TBALE_Input_Registers_Size))return MB_ERROR_ILLEGAL_DATA_ADDRESS;
@@ -102,6 +115,24 @@ mb_error_e mb_check_on_off(uint16_t Value)
 {
     if(Value != MB_COIL_ON && Value != MB_COIL_OFF) return MB_ERROR_ILLEGAL_DATA_VALUE;
     return MB_OK;
+}
+
+mb_error_e mb_check_encapsulated_interface_mei_type(uint8_t mei)
+{
+    if(mei==0x0e) return MB_OK; // Read Device Identification
+    else return MB_ERROR_ILLEGAL_DATA_VALUE;
+}
+
+mb_error_e mb_check_ei_device_id_code(uint8_t id)
+{
+    if(id==0x01) return MB_OK; // Basic Device Identification
+    else return MB_ERROR_ILLEGAL_DATA_ADDRESS;
+}
+
+mb_error_e mb_check_ei_device_o_code(uint8_t o_id)
+{
+    if(o_id<3) return MB_OK; // Basic Device Identification
+    else return MB_ERROR_ILLEGAL_DATA_ADDRESS;
 }
 
 #endif

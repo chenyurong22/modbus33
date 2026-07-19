@@ -4,6 +4,7 @@
  https://github.com/liyanboy74/modbus
 */
 
+#include <string.h>
 #include "mb-packet.h"
 
 uint8_t MB_PACKET_Buffer[MB_PACKET_Buffer_Size];
@@ -113,6 +114,41 @@ mb_packet_s mb_packet_response_read_exeption_status(uint8_t Status)
 	Packet.function= MB_FUNC_Read_Exception_Status;
 	Packet.length=1;
 	Packet.payload[0]=Status;
+	return Packet;
+}
+
+mb_packet_s mb_packet_response_read_device_identification(uint8_t o_id)
+{
+	mb_packet_s Packet={.payload=MB_PACKET_Buffer};
+
+	uint8_t i,l;
+	const char *info[]={
+		MB_DEVICE_IDENTIFICATION_VENDOR,
+		MB_DEVICE_IDENTIFICATION_PRODUCT,
+		MB_DEVICE_IDENTIFICATION_REVISION
+	};
+
+	uint8_t object_count = sizeof(info) / sizeof(info[0]);
+
+	Packet.function= MB_FUNC_Encapsulated_Interface;
+	Packet.length=0;
+
+	Packet.payload[Packet.length++]=0x0e;	//MEI Type
+	Packet.payload[Packet.length++]=0x01;	//Read Device ID Code
+	Packet.payload[Packet.length++]=0x01;	//Conformity Level
+	Packet.payload[Packet.length++]=0x00;	//More Follows
+	Packet.payload[Packet.length++]=0x00;	//Next Object ID
+	Packet.payload[Packet.length++]=object_count-o_id;	//Number Of Objects
+
+	for(i=o_id;i<object_count;i++)
+	{
+		l=(uint8_t)strlen(info[i]);
+		Packet.payload[Packet.length++]=i;
+		Packet.payload[Packet.length++]=l;
+		memcpy(&Packet.payload[Packet.length],info[i],l);
+		Packet.length+=l;
+	}
+
 	return Packet;
 }
 

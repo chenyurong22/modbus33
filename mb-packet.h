@@ -33,6 +33,7 @@ mb_packet_s mb_packet_response_write_single_register(uint16_t RAddress,uint16_t 
 mb_packet_s mb_packet_response_write_multiple_coils(uint16_t StartAd,uint16_t Quantity);
 mb_packet_s mb_packet_response_write_multiple_registers(uint16_t StartAd,uint16_t Quantity);
 mb_packet_s mb_packet_response_read_write_multiple_registers(uint8_t len,uint8_t *Data);
+mb_packet_s mb_packet_response_read_device_identification(uint8_t o_id);
 mb_packet_s mb_packet_error(mb_function_e Func,mb_error_e Exeption_Code);
 
 #endif

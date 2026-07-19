@@ -28,6 +28,10 @@ extern "C" {
 // Default SLAVE mode Device Address
 #define MB_DEFAULT_SLAVE_ADDRESS 		0x01
 
+#define MB_DEVICE_IDENTIFICATION_VENDOR                 "VENDOR"
+#define MB_DEVICE_IDENTIFICATION_PRODUCT                "PRODUCT"
+#define MB_DEVICE_IDENTIFICATION_REVISION               "1.0"
+
 // Listen slave address MB_BROADCAST_ADDRESS but don't response to master
 // Comment that for disable support broadcast packets
 #define MB_SLAVE_LISTEN_BROADCAST
@@ -49,6 +53,7 @@ extern "C" {
 #define MB_ENABLE_FUNC_Write_Multiple_Registers         1
 #define MB_ENABLE_FUNC_Read_Write_Multiple_Registers    1
 #define MB_ENABLE_FUNC_Read_Exception_Status            1
+#define MB_ENABLE_FUNC_Encapsulated_Interface           1
 
 
 #define MB_COIL_ON  0xff00

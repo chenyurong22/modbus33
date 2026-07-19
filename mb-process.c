@@ -216,6 +216,15 @@ mb_error_e mb_slave_process_read_write_multiple_registers(mb_packet_s* Packet)
     return MB_OK;
 }
 
+mb_error_e mb_slave_process_read_device_identification(mb_packet_s* Packet)
+{
+    #ifdef MB_SLAVE_LISTEN_BROADCAST
+    if(Packet->unit_id != MB_BROADCAST_ADDRESS)
+    #endif
+    mb_tx_packet_handler(mb_packet_response_read_device_identification(Packet->payload[2]));
+    return MB_OK;
+}
+
 mb_error_e mb_slave_process_read_exeption_status(mb_packet_s* Packet)
 {
     #ifdef MB_SLAVE_LISTEN_BROADCAST

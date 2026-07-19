@@ -248,13 +248,14 @@ void mb_link_check_new_data(uint8_t oneByte)
                 case MB_FUNC_Read_Input_Registers:
                 case MB_FUNC_Write_Single_Coil:
                 case MB_FUNC_Write_Single_Register:
+                case MB_FUNC_Encapsulated_Interface:
                     {
                         MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
                         MB_LINK_Rx_Buffer_Index++;
 
-                        if(MB_LINK_Rx_Buffer_Index>=8)
+                        if(MB_LINK_Rx_Buffer_Index>=((MB_LINK_Func==0x2B)?7:8))
                         {
-                            if(mb_crc_check(MB_LINK_Rx_Buffer,8)==MB_CRC_OK)
+                            if(mb_crc_check(MB_LINK_Rx_Buffer,MB_LINK_Rx_Buffer_Index)==MB_CRC_OK)
                             {
                                 // OK -> Remove CRC & Go!
                                 mb_rx_packet_handler(mb_rx_packet_split(MB_LINK_Rx_Buffer,MB_LINK_Rx_Buffer_Index-2));

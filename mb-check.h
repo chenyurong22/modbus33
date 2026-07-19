@@ -21,6 +21,10 @@ mb_error_e mb_check_table_holding_registers_address(uint16_t StartAd,uint16_t Qu
 mb_error_e mb_check_quantity_bit_n_byte(uint16_t Quantity,uint8_t N);
 mb_error_e mb_check_quantity_reg_n_byte(uint16_t Quantity,uint8_t N);
 
+mb_error_e mb_check_encapsulated_interface_mei_type(uint8_t mei);
+mb_error_e mb_check_ei_device_id_code(uint8_t id);
+mb_error_e mb_check_ei_device_o_code(uint8_t o_id);
+
 #endif
 
 #ifdef __cplusplus
