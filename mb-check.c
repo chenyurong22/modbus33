@@ -131,7 +131,7 @@ mb_error_e mb_check_ei_device_id_code(uint8_t id)
 
 mb_error_e mb_check_ei_device_o_code(uint8_t o_id)
 {
-    if(o_id<3) return MB_OK; // Basic Device Identification
+    if(o_id<3) return MB_OK; // Max object code
     else return MB_ERROR_ILLEGAL_DATA_ADDRESS;
 }
 
