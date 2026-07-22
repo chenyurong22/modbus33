@@ -10,7 +10,11 @@ extern "C" {
 #if(MB_MODE==MB_MODE_SLAVE)
 
 mb_error_e mb_check_func(uint8_t func);
-mb_error_e mb_check_quantity(uint16_t Quantity);
+mb_error_e mb_check_quantity_121(uint16_t Quantity);
+mb_error_e mb_check_quantity_123(uint16_t Quantity);
+mb_error_e mb_check_quantity_125(uint16_t Quantity);
+mb_error_e mb_check_quantity_1968(uint16_t Quantity);
+mb_error_e mb_check_quantity_2000(uint16_t Quantity);
 mb_error_e mb_check_on_off(uint16_t Value);
 
 mb_error_e mb_check_table_coils_address(uint16_t StartAd,uint16_t Quantity);

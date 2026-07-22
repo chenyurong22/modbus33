@@ -71,7 +71,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Read_Coils
         if(Packet.function==MB_FUNC_Read_Coils)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_2000(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_table_coils_address(MB_U16_AT(Packet.payload),MB_U16_AT(Packet.payload+2));
@@ -86,7 +86,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Read_Discrete_Inputs
         if(Packet.function==MB_FUNC_Read_Discrete_Inputs)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_2000(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_table_discretes_input_address(MB_U16_AT(Packet.payload),MB_U16_AT(Packet.payload+2));
@@ -101,7 +101,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Read_Holding_Registers
         if(Packet.function==MB_FUNC_Read_Holding_Registers)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_125(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_table_holding_registers_address(MB_U16_AT(Packet.payload),MB_U16_AT(Packet.payload+2));
@@ -116,7 +116,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Read_Input_Registers
         if(Packet.function==MB_FUNC_Read_Input_Registers)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_125(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_table_input_registers_address(MB_U16_AT(Packet.payload),MB_U16_AT(Packet.payload+2));
@@ -158,7 +158,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Write_Multiple_Coils
         if(Packet.function==MB_FUNC_Write_Multiple_Coils)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_1968(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_quantity_bit_n_byte(MB_U16_AT(Packet.payload+2),Packet.payload[4]);
@@ -176,7 +176,7 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Write_Multiple_Registers
         if(Packet.function==MB_FUNC_Write_Multiple_Registers)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_123(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_quantity_reg_n_byte(MB_U16_AT(Packet.payload+2),Packet.payload[4]);
@@ -193,10 +193,10 @@ void mb_rx_packet_handler(mb_packet_s Packet)
         #if MB_ENABLE_FUNC_Read_Write_Multiple_Registers
         if(Packet.function==MB_FUNC_Read_Write_Multiple_Registers)
         {
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+2));
+            err=mb_check_quantity_125(MB_U16_AT(Packet.payload+2));
             if(err){mb_error_handler(&Packet,err);return;}
 
-            err=mb_check_quantity(MB_U16_AT(Packet.payload+6));
+            err=mb_check_quantity_121(MB_U16_AT(Packet.payload+6));
             if(err){mb_error_handler(&Packet,err);return;}
 
             err=mb_check_quantity_reg_n_byte(MB_U16_AT(Packet.payload+6),Packet.payload[8]);

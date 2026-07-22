@@ -9,10 +9,10 @@ extern "C" {
 
 #if(MB_MODE==MB_MODE_SLAVE)
 
-#define TBALE_Discretes_Input_Size      1       // x TABLE_Sel_BitSize
-#define TBALE_Coils_Size                1       // x TABLE_Sel_BitSize
-#define TBALE_Input_Registers_Size      16
-#define TABLE_Holding_Registers_Size    16
+#define TBALE_Discretes_Input_Size      100     // 1 to 2000 (0x7D0)
+#define TBALE_Coils_Size                100     // 1 to 2000 (0x7D0)
+#define TBALE_Input_Registers_Size      100     // 1 to 125  (0x7D)
+#define TABLE_Holding_Registers_Size    100     // 1 to 125  (0x7D)
 
 #define TABLE_Sel_BitSize               16      // Don't Change
 
