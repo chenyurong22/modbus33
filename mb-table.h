@@ -16,8 +16,8 @@ extern "C" {
 
 #define TABLE_Sel_BitSize               16      // Don't Change
 
-#define TBALE_Discretes_Input_Size_U16  ((TBALE_Discretes_Input_Size/16)+1)
-#define TBALE_Coils_Size_U16            ((TBALE_Coils_Size/16)+1)
+#define TBALE_Discretes_Input_Size_U16  ((TBALE_Discretes_Input_Size/TABLE_Sel_BitSize)+1)
+#define TBALE_Coils_Size_U16            ((TBALE_Coils_Size/TABLE_Sel_BitSize)+1)
 
 extern uint16_t TBALE_Discretes_Input  [];
 extern uint16_t TBALE_Coils            [];
