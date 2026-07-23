@@ -302,7 +302,7 @@ mb_packet_s mb_rx_packet_split(uint8_t *Packet_Buffer,uint8_t Len)
     mb_packet_s Packet;
 
     Packet.unit_id=Packet_Buffer[0];
-    Packet.function=Packet_Buffer[1];
+    Packet.function=(mb_function_e)Packet_Buffer[1];
     Packet.length=Len-2;//remove unit_id & function
     Packet.payload=&Packet_Buffer[2];
     return Packet;
