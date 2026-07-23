@@ -44,7 +44,7 @@ void mb_link_send(uint8_t *Data,uint8_t Len)
 
 void mb_link_prepare_tx_data(mb_packet_s Packet)
 {
-    int i;
+    uint8_t i;
 
     MB_LINK_Tx_Buffer[1]=Packet.function;
     #if (MB_MODE==MB_MODE_SLAVE)
@@ -125,7 +125,7 @@ void mb_link_check_new_data(uint8_t oneByte)
                         {
                             MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
                             MB_LINK_Rx_Buffer_Index++;
-                            MB_LINK_Loop_C=oneByte+MB_LINK_Rx_Buffer_Index+2;
+                            MB_LINK_Loop_C=(uint8_t)(oneByte+MB_LINK_Rx_Buffer_Index+2);
                         }
                     }else if((MB_LINK_Loop_C > MB_LINK_Rx_Buffer_Index) && MB_LINK_Loop_C) // Data + CRC
                     {
@@ -221,7 +221,7 @@ void mb_link_check_new_data(uint8_t oneByte)
                         {
                             MB_LINK_Rx_Buffer[MB_LINK_Rx_Buffer_Index]=oneByte;
                             MB_LINK_Rx_Buffer_Index++;
-                            MB_LINK_Loop_C=oneByte+MB_LINK_Rx_Buffer_Index+2;
+                            MB_LINK_Loop_C=(uint8_t)(oneByte+MB_LINK_Rx_Buffer_Index+2);
                         }
                     }else if((MB_LINK_Loop_C > MB_LINK_Rx_Buffer_Index) && MB_LINK_Loop_C) // Data + CRC
                     {

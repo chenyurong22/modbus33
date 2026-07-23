@@ -46,7 +46,7 @@ void mb_table_write_bit(uint16_t *TABLE,uint16_t Bit_Index,uint8_t Bit_Value)
     uint8_t BitOffset=Bit_Index%TABLE_Sel_BitSize;
     Bit_Value&=1;
     temp=TABLE[TableIndex];
-    temp&=(~(1<<BitOffset));
+    temp&=(~(uint16_t)(1<<BitOffset));
     temp|=(Bit_Value<<BitOffset);
     TABLE[TableIndex]=temp;
 }

@@ -16,6 +16,16 @@
 
 int AnsIndex=0,AnsPIndex=0;
 
+
+// Prototype
+void send_data_to_mb(uint8_t * Data,uint8_t Size);
+void bar(void);
+uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint8_t Len);
+void send_data(uint8_t *Data,uint8_t Len);
+void master_process(mb_packet_s Packet);
+
+
+
 void send_data_to_mb(uint8_t * Data,uint8_t Size)
 {
     int i;
@@ -116,7 +126,7 @@ void send_data(uint8_t *Data,uint8_t Len)
 #endif
 
 
-int main()
+int main(void)
 {
     int i,j,ret=1;
 

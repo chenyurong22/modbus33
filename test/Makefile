@@ -3,7 +3,13 @@ TARGET = mb
 CC = gcc
 
 DEFINES =
-WARN = -Wall
+WARN = -std=c99 \
+-Wall -Wextra -Wpedantic \
+-Wconversion -Wsign-conversion \
+-Wshadow -Wformat=2 \
+-Wundef -Wstrict-prototypes \
+-Wmissing-prototypes
+# -Werror
 
 SRC = ../*.c
 

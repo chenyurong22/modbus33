@@ -7,6 +7,13 @@ extern "C" {
 
 #include "mb.h"
 
+#define MB_MIN_QUANTITY         0x0001
+#define MB_MAX_QUANTITY_2000    0x07d0
+#define MB_MAX_QUANTITY_1968    0x07B0
+#define MB_MAX_QUANTITY_125     0x007D
+#define MB_MAX_QUANTITY_123     0x007B
+#define MB_MAX_QUANTITY_121     0X0079
+
 #if(MB_MODE==MB_MODE_SLAVE)
 
 mb_error_e mb_check_func(uint8_t func);

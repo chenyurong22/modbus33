@@ -18,7 +18,8 @@ uint8_t MB_PROCESS_Buffer[MB_PROCESS_Buffer_Size];
 
 mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet)
 {
-    uint16_t i,Start,Size;
+    uint16_t i,Start;
+    uint8_t Size;
     uint32_t End;
 
     Start=MB_U16_AT(Packet->payload);
@@ -30,7 +31,7 @@ mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet)
         MB_PROCESS_Buffer[i/8]|=mb_table_read_bit(TBALE_Coils,Start)<<(i%8);
     }
 
-    Size=i/8;
+    Size=(uint8_t)(i/8);
     if(i%8)Size++;
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
@@ -42,7 +43,8 @@ mb_error_e mb_slave_process_read_coils(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet)
 {
-    uint16_t i,Start,Size;
+    uint16_t i,Start;
+    uint8_t Size;
     uint32_t End;
 
     Start=MB_U16_AT(Packet->payload);
@@ -54,7 +56,7 @@ mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet)
         MB_PROCESS_Buffer[i/8]|=mb_table_read_bit(TBALE_Discretes_Input,Start)<<(i%8);
     }
 
-    Size=i/8;
+    Size=(uint8_t)(i/8);
     if(i%8)Size++;
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
@@ -66,7 +68,8 @@ mb_error_e mb_slave_process_read_discrere_inputs(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet)
 {
-    uint16_t i,Start,Temp;
+    uint8_t i;
+    uint16_t Start,Temp;
     uint32_t End;
 
     Start=MB_U16_AT(Packet->payload);
@@ -76,8 +79,8 @@ mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet)
     {
         Temp=mb_table_read(TABLE_Holding_Registers,Start);
 
-        MB_PROCESS_Buffer[i]=(Temp>>8)&0xff;
-        MB_PROCESS_Buffer[i+1]=Temp&0xff;
+        MB_PROCESS_Buffer[i]=(uint8_t)((Temp>>8)&0xff);
+        MB_PROCESS_Buffer[i+1]=(uint8_t)(Temp&0xff);
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
@@ -89,7 +92,8 @@ mb_error_e mb_slave_process_read_holding_registers(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
 {
-    uint16_t i,Start,Temp;
+    uint8_t i;
+    uint16_t Start,Temp;
     uint32_t End;
 
     Start=MB_U16_AT(Packet->payload);
@@ -99,8 +103,8 @@ mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
     {
         Temp=mb_table_read(TBALE_Input_Registers,Start);
 
-        MB_PROCESS_Buffer[i]=(Temp>>8)&0xff;
-        MB_PROCESS_Buffer[i+1]=Temp&0xff;
+        MB_PROCESS_Buffer[i]=(uint8_t)((Temp>>8)&0xff);
+        MB_PROCESS_Buffer[i+1]=(uint8_t)(Temp&0xff);
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST
@@ -112,7 +116,7 @@ mb_error_e mb_slave_process_read_input_registers(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_write_single_coil(mb_packet_s* Packet)
 {
-    mb_table_write_bit(TBALE_Coils,MB_U16_AT(Packet->payload),MB_U16_AT(Packet->payload+2)>>8);
+    mb_table_write_bit(TBALE_Coils,MB_U16_AT(Packet->payload),Packet->payload[2]);
     #ifdef MB_SLAVE_LISTEN_BROADCAST
     if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
@@ -182,7 +186,8 @@ mb_error_e mb_slave_process_write_multiple_register(mb_packet_s* Packet)
 
 mb_error_e mb_slave_process_read_write_multiple_registers(mb_packet_s* Packet)
 {
-    uint16_t i, Start, Quantity, Temp;
+    uint8_t i;
+    uint16_t Start, Quantity, Temp;
     uint32_t End;
 
     // Write
@@ -205,8 +210,8 @@ mb_error_e mb_slave_process_read_write_multiple_registers(mb_packet_s* Packet)
     {
         Temp=mb_table_read(TABLE_Holding_Registers,Start);
 
-        MB_PROCESS_Buffer[i]=(Temp>>8)&0xff;
-        MB_PROCESS_Buffer[i+1]=Temp&0xff;
+        MB_PROCESS_Buffer[i]=(uint8_t)((Temp>>8)&0xff);
+        MB_PROCESS_Buffer[i+1]=(uint8_t)(Temp&0xff);
     }
 
     #ifdef MB_SLAVE_LISTEN_BROADCAST

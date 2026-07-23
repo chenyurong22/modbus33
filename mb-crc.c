@@ -47,7 +47,7 @@ uint16_t mb_crc16 (const uint8_t *nData, uint16_t wLength)
 	uint16_t wCRCWord = 0xFFFF;
 	while (wLength--)
 	{
-		nTemp = *nData++ ^ wCRCWord;
+		nTemp = (uint8_t)(*nData++ ^ wCRCWord);
 		wCRCWord >>= 8;
 		wCRCWord ^= wCRCTable[nTemp];
 	}
@@ -58,8 +58,8 @@ uint8_t mb_crc_add(uint8_t *Buffer,uint8_t Len)
 {
 	uint16_t Temp;
 	Temp = mb_crc16(Buffer,Len);
-	Buffer[Len] = Temp&0xff;
-	Buffer[Len+1] = Temp>>8;
+	Buffer[Len] = (uint8_t)(Temp&0xff);
+	Buffer[Len+1] = (uint8_t)(Temp>>8);
 	return Len+2;
 }
 

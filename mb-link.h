@@ -22,13 +22,12 @@ typedef enum{
     MB_LINK_ERROR_FUNC
 }mb_link_error_e;
 
-void             mb_link_check_new_data(uint8_t oneByte);
-void             mb_link_send(uint8_t *Data,uint8_t Len);
-
-void             mb_link_reset_rx_buffer(void);
-void             mb_link_prepare_tx_data(mb_packet_s Packet);
-
-mb_packet_s      mb_rx_packet_split(uint8_t *Packet_Buffer,uint8_t Len);
+void            mb_link_check_new_data(uint8_t oneByte);
+void            mb_link_send(uint8_t *Data,uint8_t Len);
+void            mb_link_reset_rx_buffer(void);
+void            mb_link_prepare_tx_data(mb_packet_s Packet);
+void            mb_link_error_handler(mb_link_error_e err);
+mb_packet_s     mb_rx_packet_split(uint8_t *Packet_Buffer,uint8_t Len);
 
 
 #ifdef __cplusplus

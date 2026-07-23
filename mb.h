@@ -59,8 +59,6 @@ extern "C" {
 #define MB_COIL_ON  0xff00
 #define MB_COIL_OFF 0x0000
 
-#define MB_MIN_QUANTITY 0x0001
-#define MB_MAX_QUANTITY 0x07d0
 
 #define MB_U16_AT(ptr) ((uint16_t)(((uint16_t)((ptr)[0]) << 8) | ((ptr)[1])))
 
@@ -93,12 +91,12 @@ typedef enum{
 
 } mb_function_e;
 
-typedef enum
-{
-    MB_TRANSPORT_RTU,
-    MB_TRANSPORT_ASCII,
-    MB_TRANSPORT_TCP
-} mb_transport_e;
+// typedef enum
+// {
+//     MB_TRANSPORT_RTU,
+//     MB_TRANSPORT_ASCII,
+//     MB_TRANSPORT_TCP
+// } mb_transport_e;
 
 // MODBUS Exception Codes
 typedef enum{

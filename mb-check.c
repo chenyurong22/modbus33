@@ -65,42 +65,42 @@ mb_error_e mb_check_func(uint8_t func)
 mb_error_e mb_check_quantity_121(uint16_t Quantity)
 {
 	//1 to 121  (0X0079), for  (0x17) Read/Write Multiple registers
-    if(Quantity>=0x0001&&Quantity<=0X0079)return MB_OK;
+    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY_121)return MB_OK;
     return MB_ERROR_ILLEGAL_DATA_VALUE;
 }
 
 mb_error_e mb_check_quantity_123(uint16_t Quantity)
 {
 	//1 to 123  (0x007B), for (0x10) Write Multiple registers
-    if(Quantity>=0x0001&&Quantity<=0x007B)return MB_OK;
+    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY_123)return MB_OK;
     return MB_ERROR_ILLEGAL_DATA_VALUE;
 }
 
 mb_error_e mb_check_quantity_125(uint16_t Quantity)
 {
 	//1 to 125  (0x7D), for (0x03) Read Holding Registers, (0x04) Read Input Registers
-    if(Quantity>=0x0001&&Quantity<=0x007D)return MB_OK;
+    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY_125)return MB_OK;
     return MB_ERROR_ILLEGAL_DATA_VALUE;
 }
 
 mb_error_e mb_check_quantity_1968(uint16_t Quantity)
 {
 	//1 to 1968 (0x07B0), for (0x0F) Write Multiple Coils
-    if(Quantity>=0x0001&&Quantity<=0x07B0)return MB_OK;
+    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY_1968)return MB_OK;
     return MB_ERROR_ILLEGAL_DATA_VALUE;
 }
 
 mb_error_e mb_check_quantity_2000(uint16_t Quantity)
 {
 	//1 to 2000 (0x7D0), for (0x01) Read Coils ,(0x02) Read Discrete Inputs
-    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY)return MB_OK;
+    if(Quantity>=MB_MIN_QUANTITY&&Quantity<=MB_MAX_QUANTITY_2000)return MB_OK;
     return MB_ERROR_ILLEGAL_DATA_VALUE;
 }
 
 mb_error_e mb_check_quantity_bit_n_byte(uint16_t Quantity,uint8_t N)
 {
     uint8_t n;
-    n=Quantity/8;
+    n=(uint8_t)(Quantity/8);
     if(Quantity%8)n++;
     if(n!=N)return MB_ERROR_ILLEGAL_DATA_VALUE;
     return MB_OK;
