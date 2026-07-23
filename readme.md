@@ -43,3 +43,7 @@ make server
 The server listens on TCP port 1502 and allows a client application to send test frames to the Modbus RTU slave.
 
 The TCP connection is only used as a test interface; the Modbus protocol implementation remains RTU.
+
+#### Modbus Master Simulator
+Radzio! Modbus Master Simulator is written for testing Modbus slave devices. Modbus protocol exist for serial port (RTU) and for Ethernet (TCP). 
+ [[Download link]](https://en.radzio.dxp.pl/modbus-master-simulator/)
