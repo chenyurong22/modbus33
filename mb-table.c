@@ -23,8 +23,8 @@
  * └──────────────────┴─────────────┴─────────┘
  */
 
-uint16_t TBALE_Discretes_Input  [TBALE_Discretes_Input_Size];
-uint16_t TBALE_Coils            [TBALE_Coils_Size];
+uint16_t TBALE_Discretes_Input  [TBALE_Discretes_Input_Size_U16];
+uint16_t TBALE_Coils            [TBALE_Coils_Size_U16];
 uint16_t TBALE_Input_Registers  [TBALE_Input_Registers_Size];
 uint16_t TABLE_Holding_Registers[TABLE_Holding_Registers_Size];
 
