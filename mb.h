@@ -39,7 +39,7 @@ extern "C" {
 // Default Broadcast address
 #define MB_BROADCAST_ADDRESS 0
 
-// Default All layes buffer size
+// Default All layers buffer size
 #define MB_DEFAULT_BUFFER_SIZE 64
 
 // Enable or Disable Support Modbus Function for Slave Mode
