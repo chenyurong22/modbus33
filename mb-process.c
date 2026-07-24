@@ -7,8 +7,11 @@
 #include <stdio.h>
 #include "mb-process.h"
 #include "mb-table.h"
-#include "mb-link.h"
 #include "mb-packet.h"
+
+#if(MB_TRANSPORT==MB_TRANSPORT_RTU)
+#include "mb-rtu.h"
+#endif
 
 #if(MB_MODE==MB_MODE_SLAVE)
 
@@ -235,7 +238,7 @@ mb_error_e mb_slave_process_read_exeption_status(mb_packet_s* Packet)
     #ifdef MB_SLAVE_LISTEN_BROADCAST
     if(Packet->unit_id != MB_BROADCAST_ADDRESS)
     #endif
-    mb_tx_packet_handler(mb_packet_response_read_exeption_status(MB_Config.status));
+    mb_tx_packet_handler(mb_packet_response_read_exeption_status(mb.status));
     return MB_OK;
 }
 
