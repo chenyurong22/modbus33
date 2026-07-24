@@ -9,7 +9,6 @@
 #include "mb.h"
 #include "mb-rtu.h"
 #include "mb-crc.h"
-#include "mb-check.h"
 
 uint8_t MB_RTU_Tx_Buffer[MB_RTU_Tx_Buffer_Size];
 uint8_t MB_RTU_Rx_Buffer[MB_RTU_Rx_Buffer_Size];

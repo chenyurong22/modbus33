@@ -7,11 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "mb.h"
-
-#include "mb-crc.h"
-#include "mb-packet.h"
 #include "mb-rtu.h"
+#include "mb-packet.h"
 
 
 #define TestNum 10
