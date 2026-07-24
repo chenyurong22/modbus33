@@ -20,20 +20,10 @@ extern "C" {
 #define MB_MODE_MASTER  0
 #define MB_MODE_SLAVE   1
 
-// Transport List
-#define MB_TRANSPORT_RTU    0
-#define MB_TRANSPORT_TCP    1
-#define MB_TRANSPORT_ASCII  2
-
 
 // Mode Select
 #ifndef MB_MODE
 	#define MB_MODE         MB_MODE_SLAVE
-#endif
-
-// Transport Select
-#ifndef MB_TRANSPORT
-	#define MB_TRANSPORT    MB_TRANSPORT_RTU
 #endif
 
 // Default SLAVE mode Device Address
@@ -144,7 +134,7 @@ extern mb_config_s mb;
 #if(MB_MODE==MB_MODE_SLAVE)
 
 void            mb_slave_address_set(uint8_t Address);						// Set Slave Address
-uint8_t         mb_slave_address_get(void);								// Get Slave Address
+uint8_t         mb_slave_address_get(void);                                 // Get Slave Address
 
 void            mb_slave_status_set(uint8_t status);						// Set Slave status
 uint8_t         mb_slave_status_get(void);								    // Get Slave status

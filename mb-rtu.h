@@ -1,5 +1,5 @@
-#ifndef _MB_LINK_H_
-#define _MB_LINK_H_
+#ifndef _MB_RTU_H_
+#define _MB_RTU_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,19 +9,19 @@ extern "C" {
 
 #include "mb.h"
 
-// #define MB_LINK_DEBUG
+// #define MB_RTU_DEBUG
 
-#define MB_LINK_Rx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
-#define MB_LINK_Tx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
+#define MB_RTU_Rx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
+#define MB_RTU_Tx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE
 
-#define MB_LINK_Rx_MDBL  (MB_LINK_Rx_Buffer_Size-9)
+#define MB_RTU_Rx_MDBL  (MB_RTU_Rx_Buffer_Size-9)
 
 typedef enum{
-    MB_LINK_OK,
-    MB_LINK_ERROR_Address,
-    MB_LINK_ERROR_Data_Size,
-    MB_LINK_ERROR_CRC,
-    MB_LINK_ERROR_FUNC
+    MB_RTU_OK,
+    MB_RTU_ERROR_Address,
+    MB_RTU_ERROR_Data_Size,
+    MB_RTU_ERROR_CRC,
+    MB_RTU_ERROR_FUNC
 }mb_rtu_error_e;
 
 void            mb_rtu_check_new_data(uint8_t oneByte);
