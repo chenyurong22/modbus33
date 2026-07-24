@@ -10,20 +10,9 @@
 #include "mb-rtu.h"
 #include "mb-packet.h"
 
-
 #define TestNum 10
 
 int AnsIndex=0,AnsPIndex=0;
-
-
-// Prototype
-void send_data_to_mb(uint8_t * Data,uint8_t Size);
-void bar(void);
-uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint16_t Len);
-void send_data(uint8_t *Data,uint16_t Len);
-void master_process(mb_packet_s Packet);
-
-
 
 void send_data_to_mb(uint8_t * Data,uint8_t Size)
 {
@@ -77,36 +66,6 @@ uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint16_t Len)
     return 0;
 }
 
-#if(MB_MODE==MB_MODE_MASTER)
-int MPIndex=0;
-void master_process(mb_packet_s Packet)
-{
-    int i;
-    printf("MP: %02x %02x ",Packet.unit_id,Packet.function);
-    printf("%02x ",Packet.length);
-    for(i=0;i<Packet.length;i++)
-    {
-        printf("%02X ",Packet.payload[i]);
-    }
-    printf("\n");
-    MPIndex++;
-}
-
-void send_data(uint8_t *Data,uint16_t Len)
-{
-    int i;
-    printf("TX: ");
-    for(i=0;i<Len;i++)printf("%02x ",Data[i]);
-    if(datacmp(Data,MasterReq[AnsIndex++],Len)==0)
-    {
-        printf("\t\tOK");
-        AnsPIndex++;
-    }
-    else printf("\t\tERROR");
-    printf("\n");
-}
-
-#else
 
 void send_data(uint8_t *Data,uint16_t Len)
 {
@@ -122,22 +81,15 @@ void send_data(uint8_t *Data,uint16_t Len)
     printf("\n");
 }
 
-#endif
 
 
 int main(void)
 {
     int i,j,ret=1;
 
-    //Set Handler for transmit data from MODBUS layer
     mb_set_tx_handler(&send_data);
-
     bar();
-
-    #if(MB_MODE==MB_MODE_SLAVE)
-
     printf("Simulate receive packets from master:\n\n");
-
 
     for(i=0;i<TestNum;i++)
     {
@@ -151,47 +103,7 @@ int main(void)
     printf("\nSTATUS %02d/%02d %s\n",AnsPIndex+1,TestNum,(TestNum==(AnsPIndex+1))?"PASS":"FAIL");
     if(TestNum==(AnsPIndex+1))ret=0;
 
-    #elif(MB_MODE==MB_MODE_MASTER)
-
-    //Set handler for process received packet in master mode
-    mb_set_master_process_handler(&master_process);
-
-    uint8_t TData[]={0x00,0xff};
-
-    printf("Test generate and send packets to slave:\n\n");
-
-    mb_tx_packet_handler(mb_packet_request_write_single_coil(1,0,MB_COIL_ON));
-    mb_tx_packet_handler(mb_packet_request_read_coil(1,0,16));
-    mb_tx_packet_handler(mb_packet_request_write_single_register(1,0,0xffff));
-    mb_tx_packet_handler(mb_packet_request_read_holding_registers(1,0,1));
-    mb_tx_packet_handler(mb_packet_request_read_discrete_inputs(1,0,16));
-    mb_tx_packet_handler(mb_packet_request_read_input_registers(1,0,1));
-    mb_tx_packet_handler(mb_packet_request_write_multiple_coils(1,0,16,2,TData));
-    mb_tx_packet_handler(mb_packet_request_read_coil(1,0,16));
-    mb_tx_packet_handler(mb_packet_request_write_multiple_registers(0,1,1,2,TData));
-    mb_tx_packet_handler(mb_packet_request_read_holding_registers(1,1,1));
-
+    bar();
     
-    printf("\nSTATUS %02d/%02d %s\n",AnsPIndex,TestNum,(TestNum==AnsPIndex)?"PASS":"FAIL");
-
-    bar();
-    printf("Process received packet from slave:\n\n");
-
-    for(i=0;i<TestNum-1;i++)
-    {
-        for(j=0;j<9;j++)
-        {
-            mb_rx_new_data(SlaveAns[i][j]);
-        }
-        mb_rx_timeout_handler();
-    }
-
-    printf("\nSTATUS %02d/%02d %s\n",MPIndex,TestNum-1,(TestNum-1==MPIndex)?"PASS":"FAIL");
-    if((TestNum-1==MPIndex))ret=0;
-
-    #endif
-
-    bar();
-
     return ret;
 }
