@@ -121,7 +121,7 @@ typedef struct
 typedef struct{
 	uint8_t address;
     uint8_t status;
-	void (*tx_handler)(uint8_t *,uint8_t);
+	void (*tx_handler)(uint8_t *,uint16_t);
 	#if(MB_MODE==MB_MODE_MASTER)
 	void (*master_process_handler)(mb_packet_s);
 	#endif
@@ -148,7 +148,7 @@ void            mb_set_master_process_handler(void (*f)(mb_packet_s));		// Set C
 
 #endif
 
-void            mb_set_tx_handler(void (*f)(uint8_t *,uint8_t));			// Set Callback for Transmit Data as Master or Slave
+void            mb_set_tx_handler(void (*f)(uint8_t *,uint16_t));			// Set Callback for Transmit Data as Master or Slave
 
 void            mb_rx_packet_handler(mb_packet_s Packet);					// Start Processing Received Packet
 void            mb_tx_packet_handler(mb_packet_s Packet);					// Prepare and Send Packet

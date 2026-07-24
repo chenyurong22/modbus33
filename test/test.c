@@ -19,8 +19,8 @@ int AnsIndex=0,AnsPIndex=0;
 // Prototype
 void send_data_to_mb(uint8_t * Data,uint8_t Size);
 void bar(void);
-uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint8_t Len);
-void send_data(uint8_t *Data,uint8_t Len);
+uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint16_t Len);
+void send_data(uint8_t *Data,uint16_t Len);
 void master_process(mb_packet_s Packet);
 
 
@@ -67,9 +67,9 @@ void bar()
     printf("\n");
 }
 
-uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint8_t Len)
+uint8_t datacmp(const uint8_t* Data1,const uint8_t* Data2,uint16_t Len)
 {
-    int i;
+    uint16_t i;
     for(i=0;i<Len;i++)
     {
         if(Data1[i]!=Data2[i])return 1;
@@ -92,7 +92,7 @@ void master_process(mb_packet_s Packet)
     MPIndex++;
 }
 
-void send_data(uint8_t *Data,uint8_t Len)
+void send_data(uint8_t *Data,uint16_t Len)
 {
     int i;
     printf("TX: ");
@@ -108,7 +108,7 @@ void send_data(uint8_t *Data,uint8_t Len)
 
 #else
 
-void send_data(uint8_t *Data,uint8_t Len)
+void send_data(uint8_t *Data,uint16_t Len)
 {
     int i;
     printf("TX: ");
