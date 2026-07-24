@@ -9,44 +9,45 @@
 #include "mb-check.h"
 #include "mb-table.h"
 #include "mb-process.h"
-#include "mb-link.h"
 #include "mb-packet.h"
 
-mb_config_s MB_Config={.address=MB_DEFAULT_SLAVE_ADDRESS,.status=0};
+#include "mb-rtu.h"
+
+mb_config_s mb={.address=MB_DEFAULT_SLAVE_ADDRESS,.status=0};
 
 #if(MB_MODE==MB_MODE_SLAVE)
 
 void mb_slave_address_set(uint8_t Address)
 {
-    MB_Config.address=Address;
+    mb.address=Address;
 }
 
 uint8_t mb_slave_address_get(void)
 {
-    return MB_Config.address;
+    return mb.address;
 }
 
 void mb_slave_status_set(uint8_t status)
 {
-    MB_Config.status=status;
+    mb.status=status;
 }
 uint8_t mb_slave_status_get(void)
 {
-    return MB_Config.status;
+    return mb.status;
 }
 
 #elif(MB_MODE==MB_MODE_MASTER)
 
 void mb_set_master_process_handler(void (*f)(mb_packet_s))
 {
-    MB_Config.master_process_handler=f;
+    mb.master_process_handler=f;
 }
 
 #endif
 
 void mb_set_tx_handler(void (*f)(uint8_t *,uint8_t))
 {
-    MB_Config.tx_handler=f;
+    mb.tx_handler=f;
 }
 
 #if(MB_MODE==MB_MODE_SLAVE)
@@ -243,23 +244,9 @@ void mb_rx_packet_handler(mb_packet_s Packet)
 
     #elif(MB_MODE==MB_MODE_MASTER)
 
-        if(MB_Config.master_process_handler!=NULL)
-        MB_Config.master_process_handler(Packet);
+        if(mb.master_process_handler!=NULL)
+        mb.master_process_handler(Packet);
 
     #endif
 }
 
-void mb_tx_packet_handler(mb_packet_s Packet)
-{
-    mb_link_prepare_tx_data(Packet);
-}
-
-void mb_rx_new_data(uint8_t Byte)
-{
-    mb_link_check_new_data(Byte);
-}
-
-void mb_rx_timeout_handler(void)
-{
-    mb_link_reset_rx_buffer();
-}

@@ -134,7 +134,7 @@ typedef struct{
 }mb_config_s;
 
 // Set MODBUS Config Public
-extern mb_config_s MB_Config;
+extern mb_config_s mb;
 
 // If Defined Mode as Slave
 #if(MB_MODE==MB_MODE_SLAVE)
@@ -156,10 +156,6 @@ void             mb_set_master_process_handler(void (*f)(mb_packet_s));		// Set 
 
 void             mb_set_tx_handler(void (*f)(uint8_t *,uint8_t));			// Set Callback for Transmit Data as Master or Slave
 
-void             mb_rx_new_data(uint8_t Byte);								// Get New Data for Detect Valid MODBUS Data
-void             mb_rx_timeout_handler(void);								// Reset MODBUS Input Buffer Index as Timeout Error
-
-void             mb_tx_packet_handler(mb_packet_s Packet);					// Prepare and Send Packet
 void             mb_rx_packet_handler(mb_packet_s Packet);					// Start Processing Received Packet
 
 
