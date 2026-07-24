@@ -307,18 +307,8 @@ mb_packet_s mb_rtu_rx_packet_split(uint8_t *Packet_Buffer,uint8_t Len)
     return Packet;
 }
 
+// RTU Transport
 void mb_tx_packet_handler(mb_packet_s Packet)
 {
     mb_rtu_prepare_tx_data(Packet);
 }
-
-void mb_rx_new_data(uint8_t Byte)
-{
-    mb_rtu_check_new_data(Byte);
-}
-
-void mb_rx_timeout_handler(void)
-{
-    mb_rtu_reset_rx_buffer();
-}
-
