@@ -102,12 +102,6 @@ typedef enum{
 
 } mb_function_e;
 
-// typedef enum
-// {
-//     MB_TRANSPORT_RTU,
-//     MB_TRANSPORT_ASCII,
-//     MB_TRANSPORT_TCP
-// } mb_transport_e;
 
 // MODBUS Exception Codes
 typedef enum{
@@ -137,7 +131,6 @@ typedef struct
 typedef struct{
 	uint8_t address;
     uint8_t status;
-	// mb_transport_e transport;
 	void (*tx_handler)(uint8_t *,uint8_t);
 	#if(MB_MODE==MB_MODE_MASTER)
 	void (*master_process_handler)(mb_packet_s);
@@ -150,24 +143,25 @@ extern mb_config_s mb;
 // If Defined Mode as Slave
 #if(MB_MODE==MB_MODE_SLAVE)
 
-void             mb_slave_address_set(uint8_t Address);						// Set Slave Address
-uint8_t          mb_slave_address_get(void);								// Get Slave Address
+void            mb_slave_address_set(uint8_t Address);						// Set Slave Address
+uint8_t         mb_slave_address_get(void);								// Get Slave Address
 
-void             mb_slave_status_set(uint8_t status);						// Set Slave status
-uint8_t          mb_slave_status_get(void);								    // Get Slave status
+void            mb_slave_status_set(uint8_t status);						// Set Slave status
+uint8_t         mb_slave_status_get(void);								    // Get Slave status
 
-void             mb_error_handler(mb_packet_s* Packet,mb_error_e err);		// Make and Send ERROR Packet in Slave Mode
+void            mb_error_handler(mb_packet_s* Packet,mb_error_e err);		// Make and Send ERROR Packet in Slave Mode
 
 // If Defined Mode as Master
 #elif(MB_MODE==MB_MODE_MASTER)
 
-void             mb_set_master_process_handler(void (*f)(mb_packet_s));		// Set Callback fot Process Received Packet as Master
+void            mb_set_master_process_handler(void (*f)(mb_packet_s));		// Set Callback fot Process Received Packet as Master
 
 #endif
 
-void             mb_set_tx_handler(void (*f)(uint8_t *,uint8_t));			// Set Callback for Transmit Data as Master or Slave
+void            mb_set_tx_handler(void (*f)(uint8_t *,uint8_t));			// Set Callback for Transmit Data as Master or Slave
 
-void             mb_rx_packet_handler(mb_packet_s Packet);					// Start Processing Received Packet
+void            mb_rx_packet_handler(mb_packet_s Packet);					// Start Processing Received Packet
+void            mb_tx_packet_handler(mb_packet_s Packet);					// Prepare and Send Packet
 
 
 #ifdef __cplusplus

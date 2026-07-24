@@ -9,10 +9,6 @@
 #include "mb-table.h"
 #include "mb-packet.h"
 
-#if(MB_TRANSPORT==MB_TRANSPORT_RTU)
-#include "mb-rtu.h"
-#endif
-
 #if(MB_MODE==MB_MODE_SLAVE)
 
 uint8_t MB_PROCESS_Buffer[MB_PROCESS_Buffer_Size];

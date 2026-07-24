@@ -7,6 +7,8 @@ extern "C" {
 
 #include <stdint.h>
 
+#include "mb.h"
+
 // #define MB_LINK_DEBUG
 
 #define MB_LINK_Rx_Buffer_Size     MB_DEFAULT_BUFFER_SIZE

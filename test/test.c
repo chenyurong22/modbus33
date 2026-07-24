@@ -11,6 +11,8 @@
 
 #include "mb-crc.h"
 #include "mb-packet.h"
+#include "mb-rtu.h"
+
 
 #define TestNum 10
 
