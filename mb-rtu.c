@@ -5,8 +5,6 @@
 */
 
 #include <stdio.h>
-
-#include "mb.h"
 #include "mb-rtu.h"
 #include "mb-crc.h"
 
