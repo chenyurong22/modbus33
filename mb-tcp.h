@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include "mb.h"
 
-// #define MB_TCP_Rx_Buffer_Size   MB_DEFAULT_BUFFER_SIZE
-#define MB_TCP_Tx_Buffer_Size   260 //MB_DEFAULT_BUFFER_SIZE
+#define MB_TCP_ADU_MAX_SIZE 260
+#define MB_TCP_Tx_Buffer_Size   MB_TCP_ADU_MAX_SIZE
 
 typedef enum
 {
