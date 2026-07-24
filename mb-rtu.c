@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #include "mb.h"
-#include "mb-link.h"
+#include "mb-rtu.h"
 #include "mb-crc.h"
 #include "mb-check.h"
 
